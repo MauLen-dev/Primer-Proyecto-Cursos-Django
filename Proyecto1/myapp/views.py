@@ -3,7 +3,20 @@ from .models import Estudiante, Profesor, Curso, Entregable
 
 def index(request):
     context = { "mensaje": "¡Bienvenidos a mi primera app con Django!" }
+    estudiantes = Estudiante.objects.all()
     return render(request, 'myapp/index.html', context)
+
+def cursos(request):
+    cursos = Curso.objects.all()
+    return render(request, 'myapp/cursos.html', {'cursos': cursos})
+
+def profesores(request):
+    profesores = Profesor.objects.all()
+    return render(request, 'myapp/profesores.html', {'profesores': profesores})
+
+def entregables(request):
+    entregables = Entregable.objects.all()
+    return render(request, 'myapp/entregables.html', {'entregables': entregables})
 
 def lista_estudiantes(request):
     estudiantes = Estudiante.objects.all()
