@@ -64,5 +64,16 @@ def profesoresBusqueda(request):
         profesores = Profesor.objects.all()
     return render(request, 'myapp/profesores.html', {'profesores': profesores, 'query': query,})        
      
-              
+def profesor_editar(request, id):
+    profesor = get_object_or_404(Profesor, id=id)
+
+    if request.method == 'POST':
+        form = ProfesorForm(request.POST, instance=profesor)
+        if form.is_valid():
+            form.save()
+            return redirect('profesores')
+    else:
+        form = ProfesorForm(instance=profesor)
+
+    return render(request, 'myapp/profesor_editar.html', {'form': form, 'profesor': profesor})              
 # Create your views here.

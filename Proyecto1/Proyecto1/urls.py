@@ -30,4 +30,5 @@ urlpatterns = [
     path('detalle_estudiante/<int:pk>/', views.detalle_estudiante, name="detalle_estudiante"),
     path('cursoform/', views.cursoform, name="cursoform"),
     path('profesorFormulario/', views.profesorFormulario, name="profesorFormulario"),
+    path('profesor_editar/', views.profesor_editar, name="profesor_editar"),
 ]
