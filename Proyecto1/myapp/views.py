@@ -57,7 +57,7 @@ def profesorFormulario(request):
    return render(request, 'myapp/profesor_formulario.html', {'form': form})
 
 def profesoresBusqueda(request):
-    query = request.GET.get('')
+    query = request.GET.get('q')
     if query:
         profesores = Profesor.objects.filter(models.Q(nombre__icontains=query) | models.Q(apellido__icontains=query) | models.Q(profesion__icontains=query))
     else:
