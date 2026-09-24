@@ -1,7 +1,28 @@
 {% extends 'base.html' %}
 {% block title %} Página de Cursos {% endblock %} 
 {% block content %}
-   <h1> Bienvenido a la página de Cursos</h1> 
+   
    <p> Aquí encontrarás información sobre los cursos disponibles en nuestra plataforma.</p>
+   <div class="container mt-4">
+       <h1 class="text-center mb-4"> Página de Cursos </h1>
+      <div class="text-end mb-4"> <a class="btn btn-secondary" href="{% url 'cursoform' %}">Agregar Curso</a> </div> 
+      <div class="row">
+         {% for curso in cursos %}
+         <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card shadow-sm h-100">
+               <div class="card-body">
+                  <h5 class="card-title text-primary"> {{ curso.nombre }} </h5>
+                  <p class="card-text mb-1"> <strong>Camada: </strong> {{ curso.camada }} </p>
+                  <p class="card-text"> <strong> Detalle: </strong> {{ curso.camada }} 
+                  </p>
+               </div>
+
+            </div>
+         </div>
+         {% empty %}
+         <p class="text-muted text-center"> No hay cursos disponibles. </p>  
+         {% endfor %}
+      </div>
+   </div>
 {% endblock %}
 
