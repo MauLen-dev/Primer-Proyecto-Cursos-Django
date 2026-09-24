@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Eliminar Profesor {% endblock  %}
+{% block content %}
+ <div class="container mt-5 text-center">
+    <h2 class="mb-4">¿Seguro que querés eliminar a {{ profesor.apellido }} {{ profesor.nombre }} </h2>
+ 
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Si, eliminar</button>
+        <a href="{% url 'profesores' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+ </div>
+{% endblock  %}

@@ -75,5 +75,11 @@ def profesor_editar(request, id):
     else:
         form = ProfesorForm(instance=profesor)
 
-    return render(request, 'myapp/profesor_editar.html', {'form': form, 'profesor': profesor})              
+    return render(request, 'myapp/profesor_editar.html', {'form': form, 'profesor': profesor}) 
+
+def profesor_eliminar(request, id):
+    
+    return render(request, 'myapp/profesor_confirm_delete.html')
+  
+           
 # Create your views here.
