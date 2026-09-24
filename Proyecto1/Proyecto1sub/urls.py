@@ -22,10 +22,10 @@ app_name = "myapp"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", views.index, name="index"),
-    path("cursos/", views.cursos, name="cursos"),
-    path("profesores/", views.profesores, name="profesores"),
-    path("entregables/", views.entregables, name="entregables"),
-    path("lista_estudiantes/", views.lista_estudiantes, name="lista_estudiantes"),
-    path("detalle_estudiante/<int:pk>/", views.detalle_estudiante, name="detalle_estudiante"),
+    path('index/', views.index, name="index"),
+    path('cursos/', views.cursos, name="cursos"),
+    path('profesores/', views.profesores, name="profesores"),
+    path('entregables/', views.entregables, name="entregables"),
+    path('lista_estudiantes/', views.lista_estudiantes, name="lista_estudiantes"),
+    path('detalle_estudiante/<int:pk>/', views.detalle_estudiante, name="detalle_estudiante"),
 ]
