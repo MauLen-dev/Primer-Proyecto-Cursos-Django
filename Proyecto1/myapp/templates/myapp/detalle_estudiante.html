@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Detalle del Estudiante</title>
-    </head>
+{% extends 'base.html' %}
+{% block title %} Detalle del Estudiante {% endblock %}
+{% block content %}
     <body>
         <h1> {{ estudiante.nombre }} {{ estudiante.apellido }} </h1>
         <p> Email: {{ estudiante.email }} </p>  
     </body>
 </html>
+{% endblock %}

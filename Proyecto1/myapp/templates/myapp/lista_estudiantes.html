@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Lista de Estudiantes</title>
-    </head>
+{% extends 'base.html' %}
+{% block title %} Lista de Estudiantes {% endblock %}
+{% block content %}
     <body>
         <h1>Lista de Estudiantes</h1>
         <ul>
@@ -11,4 +9,4 @@
             {% endfor %}
         </ul>
     </body>
-</html>
+{% endblock %}
