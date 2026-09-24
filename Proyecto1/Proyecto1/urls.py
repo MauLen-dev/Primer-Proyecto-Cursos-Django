@@ -28,4 +28,5 @@ urlpatterns = [
     path('entregables/', views.entregables, name="entregables"),
     path('lista_estudiantes/', views.lista_estudiantes, name="lista_estudiantes"),
     path('detalle_estudiante/<int:pk>/', views.detalle_estudiante, name="detalle_estudiante"),
+    path('cursoform/', views.cursoform, name="cursoform"),
 ]
