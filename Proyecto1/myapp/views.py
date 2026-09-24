@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Estudiante, Profesor, Curso, Entregable
-from .forms import CursoForm, ProfesorFormulario
+from .forms import CursoForm, ProfesorFormulario, ProfesorForm
+from django.db import models
 
 def index(request):
     context = { "mensaje": "¡Bienvenidos a mi primera app con Django!" }
@@ -54,5 +55,13 @@ def profesorFormulario(request):
    else:
     form = ProfesorFormulario() 
    return render(request, 'myapp/profesor_formulario.html', {'form': form})
+
+def profesores(request):
+    query = request.GET.get('')
+    if query:
+        profesores = Profesor.objects.filter(models.Q(nombre__icontains=query) | models.Q(apellido__icontains=query) | models.Q(profesion__icontains=query))
+    else:
+        profesores = Profesor.objects.all()    
+     
               
 # Create your views here.
