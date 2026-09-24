@@ -56,12 +56,13 @@ def profesorFormulario(request):
     form = ProfesorFormulario() 
    return render(request, 'myapp/profesor_formulario.html', {'form': form})
 
-def profesores(request):
+def profesoresBusqueda(request):
     query = request.GET.get('')
     if query:
         profesores = Profesor.objects.filter(models.Q(nombre__icontains=query) | models.Q(apellido__icontains=query) | models.Q(profesion__icontains=query))
     else:
-        profesores = Profesor.objects.all()    
+        profesores = Profesor.objects.all()
+    return render(request, 'myapp/profesores.html', {'profesores': profesores, 'query': query,})        
      
               
 # Create your views here.
