@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="text-center mb-4"> Lista de Profesores </h1>
-    <div class="text-end mb-4"> <a href="{% url 'profesorFormulario' %}">Agregar Profesor</a>
+    <div class="text-end mb-4"> <a class="btn btn-secondary" href="{% url 'profesorFormulario' %}">Agregar Profesor</a>
     </div>
     <div class="row">
         {% for profesor in profesores %}
