@@ -1,12 +1,46 @@
 {% extends 'base.html' %}
 {% block title %} Lista de Estudiantes {% endblock %}
 {% block content %}
-    <body>
-        <h1>Lista de Estudiantes</h1>
-        <ul>
-            {% for estudiante in estudiantes %}
-                <li>{{ estudiante.nombre }} - {{ estudiante.apellido }}</li>
-            {% endfor %}
-        </ul>
-    </body>
+   <div class="container mt-4">
+    <h1 class="text-center mb-4"> Lista de Estudiantes </h1>
+    <div class="text-end mb-4"> <a class="btn btn-secondary" href="{% url 'estudianteFormulario' %}">Agregar Estudiante</a>
+    </div>
+
+    <form method="get" action="{% url 'lista_estudiantes' %}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, apellido o email" value="{{ query|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </form>
+
+    <div class="row">
+        {% for estudiante in estudiantes %}
+        <div class="col-mb-4 col-sm-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card body">
+                    <h5 class="card-title text-primary"> {{ estudiante.apellido }} {{ estudiante.nombre }} 
+                    </h5>
+                    <p class="card-text mb-1"> <strong> Email:</strong> {{ estudiante.email }}
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'estudianteEditar' profesor.id %}" class="btn btn-warning btn-sm me-2">Editar</a>
+                    <a href="{% url 'estudianteEliminar' profesor.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar a {{ estudiante.nombre }} {{ estudiante.apellido }} ?')"> Eliminar </a>
+                </div>
+
+            </div>
+           
+        </div>
+       {% empty %}
+       <p class="text-muted text-center"> No hay estudiantes registrados.</p>
+       {% endfor %}
+
+    
+
+    </div>
+
+    
+</div>
 {% endblock %}
