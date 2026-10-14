@@ -1,8 +1,59 @@
 {% extends 'base.html' %}
-{% block title %} Index {% endblock %}
+{% block title %}Inicio - Gestor de Cursos{% endblock %}
+
 {% block content %}
-<body>
-    <h1> Hola Django! </h1>
-    <p> {{ mensaje }} </p>
-</body>
-{% endblock %}    
+<div class="p-5 mb-4 bg-white rounded-4 shadow-sm border text-center">
+    <div class="container-fluid py-2">
+        <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-semibold">
+            Plataforma Académica
+        </span>
+        <h1 class="display-5 fw-bold text-dark mt-2">¡Hola Django!</h1>
+        <p class="col-md-8 mx-auto fs-5 text-muted mb-0">
+            {{ mensaje }}
+        </p>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 p-3 text-center">
+            <div class="card-body">
+                <i class="bi bi-book text-primary fs-1 mb-2 d-block"></i>
+                <h5 class="card-title fw-bold">Cursos</h5>
+                <p class="card-text text-muted small">Gestiona las camadas y programas de estudio disponibles.</p>
+                <a href="{% url 'cursos' %}" class="btn btn-sm btn-light text-primary fw-semibold stretched-link">Ir a Cursos &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 p-3 text-center">
+            <div class="card-body">
+                <i class="bi bi-person-workspace text-success fs-1 mb-2 d-block"></i>
+                <h5 class="card-title fw-bold">Profesores</h5>
+                <p class="card-text text-muted small">Administra el plantel docente, sus datos y profesiones.</p>
+                <a href="{% url 'profesores' %}" class="btn btn-sm btn-light text-success fw-semibold stretched-link">Ir a Profesores &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 p-3 text-center">
+            <div class="card-body">
+                <i class="bi bi-people text-info fs-1 mb-2 d-block"></i>
+                <h5 class="card-title fw-bold">Estudiantes</h5>
+                <p class="card-text text-muted small">Consulta el padrón de alumnos inscriptos en la plataforma.</p>
+                <a href="{% url 'lista_estudiantes' %}" class="btn btn-sm btn-light text-info fw-semibold stretched-link">Ir a Estudiantes &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100 p-3 text-center">
+            <div class="card-body">
+                <i class="bi bi-file-earmark-check text-warning fs-1 mb-2 d-block"></i>
+                <h5 class="card-title fw-bold">Entregables</h5>
+                <p class="card-text text-muted small">Revisa el estado y fechas de los trabajos prácticos.</p>
+                <a href="{% url 'entregables' %}" class="btn btn-sm btn-light text-warning fw-semibold stretched-link">Ir a Entregables &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
