@@ -1,57 +1,95 @@
 {% extends 'base.html' %}
-{% block title %}Inicio - Gestor de Cursos{% endblock %}
+{% load widget_tweaks %}
+{% block title %}Acceso - Gestor de Cursos{% endblock %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-white rounded-4 shadow-sm border text-center">
-    <div class="container-fluid py-2">
-        <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill fw-semibold">
-            Plataforma Académica
-        </span>
-        <h1 class="display-5 fw-bold text-dark mt-2">¡Hola Django!</h1>
-        <p class="col-md-8 mx-auto fs-5 text-muted mb-0">
-            {{ mensaje }}
-        </p>
-    </div>
-</div>
+<div class="row justify-content-center align-items-center my-4">
+    <div class="col-md-8 col-lg-5">
+        <div class="card shadow-sm p-4 border-0">
+            
+            <!-- Encabezado -->
+            <div class="text-center mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 64px; height: 64px;">
+                    <i class="bi bi-mortarboard-fill fs-2"></i>
+                </div>
+                <h2 class="fw-bold text-dark mb-1">Gestor de Cursos</h2>
+                <p class="text-muted small mb-0">Inicia sesión o crea una cuenta para continuar</p>
+            </div>
 
-<div class="row g-4 mt-2">
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 p-3 text-center">
-            <div class="card-body">
-                <i class="bi bi-book text-primary fs-1 mb-2 d-block"></i>
-                <h5 class="card-title fw-bold">Cursos</h5>
-                <p class="card-text text-muted small">Gestiona las camadas y programas de estudio disponibles.</p>
-                <a href="{% url 'cursos' %}" class="btn btn-sm btn-light text-primary fw-semibold stretched-link">Ir a Cursos &rarr;</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 p-3 text-center">
-            <div class="card-body">
-                <i class="bi bi-person-workspace text-success fs-1 mb-2 d-block"></i>
-                <h5 class="card-title fw-bold">Profesores</h5>
-                <p class="card-text text-muted small">Administra el plantel docente, sus datos y profesiones.</p>
-                <a href="{% url 'profesores' %}" class="btn btn-sm btn-light text-success fw-semibold stretched-link">Ir a Profesores &rarr;</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 p-3 text-center">
-            <div class="card-body">
-                <i class="bi bi-people text-info fs-1 mb-2 d-block"></i>
-                <h5 class="card-title fw-bold">Estudiantes</h5>
-                <p class="card-text text-muted small">Consulta el padrón de alumnos inscriptos en la plataforma.</p>
-                <a href="{% url 'lista_estudiantes' %}" class="btn btn-sm btn-light text-info fw-semibold stretched-link">Ir a Estudiantes &rarr;</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 p-3 text-center">
-            <div class="card-body">
-                <i class="bi bi-file-earmark-check text-warning fs-1 mb-2 d-block"></i>
-                <h5 class="card-title fw-bold">Entregables</h5>
-                <p class="card-text text-muted small">Revisa el estado y fechas de los trabajos prácticos.</p>
-                <a href="{% url 'entregables' %}" class="btn btn-sm btn-light text-warning fw-semibold stretched-link">Ir a Entregables &rarr;</a>
+            <!-- Pestañas (Iniciar Sesión / Registrarse) -->
+            <ul class="nav nav-pills nav-fill bg-light p-1 rounded-3 mb-4" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if active_tab != 'registro' %}active{% endif %} fw-semibold" id="login-tab" data-bs-toggle="pill" data-bs-target="#login-pane" type="button" role="tab">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if active_tab == 'registro' %}active{% endif %} fw-semibold" id="registro-tab" data-bs-toggle="pill" data-bs-target="#registro-pane" type="button" role="tab">
+                        <i class="bi bi-person-plus me-1"></i>Registrarse
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Contenido de las Pestañas -->
+            <div class="tab-content" id="authTabsContent">
+                
+                <!-- PESTAÑA 1: INICIAR SESIÓN -->
+                <div class="tab-pane fade {% if active_tab != 'registro' %}show active{% endif %}" id="login-pane" role="tabpanel">
+                    <form method="POST" action="{% url 'login' %}" novalidate>
+                        {% csrf_token %}
+
+                        {% if login_form.non_field_errors %}
+                            <div class="alert alert-danger py-2 small">
+                                <i class="bi bi-exclamation-circle me-1"></i>Usuario o contraseña incorrectos.
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Nombre de usuario</label>
+                            {{ login_form.username|add_class:"form-control"|attr:"placeholder:Ingresa tu usuario" }}
+                            <div class="text-danger small">{{ login_form.username.errors }}</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">Contraseña</label>
+                            {{ login_form.password|add_class:"form-control"|attr:"placeholder:••••••••" }}
+                            <div class="text-danger small">{{ login_form.password.errors }}</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary py-2 fw-semibold">
+                                Ingresar a la Plataforma
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- PESTAÑA 2: REGISTRARSE -->
+                <div class="tab-pane fade {% if active_tab == 'registro' %}show active{% endif %}" id="registro-pane" role="tabpanel">
+                    <form method="POST" action="{% url 'registro' %}" novalidate>
+                        {% csrf_token %}
+
+                        {% for field in registro_form %}
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">{{ field.label }}</label>
+                                {{ field|add_class:"form-control" }}
+                                {% if field.help_text %}
+                                    <div class="form-text small text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary py-2 fw-semibold">
+                                Crear Cuenta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>

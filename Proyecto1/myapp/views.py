@@ -10,9 +10,17 @@ from .forms import (
 )
 
 def index(request):
-    context = {"mensaje": "¡Bienvenidos a mi primera app con Django!"}
-    return render(request, 'myapp/index.html', context)
-
+    # Si el usuario ya inició sesión, lo enviamos directamente a Cursos
+    if request.user.is_authenticated:
+        return redirect('cursos')
+    
+    login_form = AuthenticationForm()
+    registro_form = RegistroUsuarioForm()
+    return render(request, 'myapp/index.html', {
+        'login_form': login_form,
+        'registro_form': registro_form,
+        'active_tab': 'login'
+    })
 # ================= CURSOS =================
 def cursos(request):
     query = request.GET.get('q')
@@ -182,26 +190,44 @@ def entregable_eliminar(request, id):
 
 # ================= USUARIOS (LOGIN / REGISTRO / LOGOUT) =================
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('cursos')
+
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            usuario = form.get_user()
+        login_form = AuthenticationForm(request, data=request.POST)
+        if login_form.is_valid():
+            usuario = login_form.get_user()
             login(request, usuario)
-            return redirect('index')
+            return redirect('cursos')
     else:
-        form = AuthenticationForm()
-    return render(request, 'myapp/login.html', {'form': form})
+        login_form = AuthenticationForm()
+
+    registro_form = RegistroUsuarioForm()
+    return render(request, 'myapp/index.html', {
+        'login_form': login_form,
+        'registro_form': registro_form,
+        'active_tab': 'login'
+    })
 
 def registro_view(request):
+    if request.user.is_authenticated:
+        return redirect('cursos')
+
     if request.method == 'POST':
-        form = RegistroUsuarioForm(request.POST)
-        if form.is_valid():
-            usuario = form.save()
-            login(request, usuario)  # Inicia sesión automáticamente tras registrarse
-            return redirect('index')
+        registro_form = RegistroUsuarioForm(request.POST)
+        if registro_form.is_valid():
+            usuario = registro_form.save()
+            login(request, usuario)
+            return redirect('cursos')
     else:
-        form = RegistroUsuarioForm()
-    return render(request, 'myapp/registro.html', {'form': form})
+        registro_form = RegistroUsuarioForm()
+
+    login_form = AuthenticationForm()
+    return render(request, 'myapp/index.html', {
+        'login_form': login_form,
+        'registro_form': registro_form,
+        'active_tab': 'registro'
+    })
 
 def logout_view(request):
     logout(request)
