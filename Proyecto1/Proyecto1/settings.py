@@ -119,3 +119,4 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+LOGIN_URL = 'index'  # Redirige a la página de inicio de sesión si el usuario no está autenticado

@@ -1,16 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
-from .models import Estudiante, Profesor, Curso, Entregable, Avatar
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from .models import Estudiante, Profesor, Curso, Entregable, Avatar
 from .forms import (
     CursoForm, CursoModelForm,
     ProfesorFormulario, ProfesorForm,
-    EstudianteForm, EntregableForm, RegistroUsuarioForm, EditarPerfilForm, AvatarForm
+    EstudianteForm, EntregableForm,
+    RegistroUsuarioForm, EditarPerfilForm, AvatarForm
 )
 
+# ================= ACCESO PÚBLICO (PORTAL DE LOGIN Y REGISTRO) =================
 def index(request):
-    # Si el usuario ya inició sesión, lo enviamos directamente a Cursos
     if request.user.is_authenticated:
         return redirect('cursos')
     
@@ -21,174 +23,7 @@ def index(request):
         'registro_form': registro_form,
         'active_tab': 'login'
     })
-# ================= CURSOS =================
-def cursos(request):
-    query = request.GET.get('q')
-    if query:
-        cursos = Curso.objects.filter(
-            models.Q(nombre__icontains=query) | models.Q(camada__icontains=query)
-        )
-    else:
-        cursos = Curso.objects.all()
-    return render(request, 'myapp/cursos.html', {'cursos': cursos, 'query': query})
 
-def cursoform(request):
-    if request.method == 'POST':
-        form = CursoForm(request.POST)
-        if form.is_valid():
-            nombre = form.cleaned_data['nombre']
-            camada = form.cleaned_data['camada']
-            curso = Curso(nombre=nombre, camada=camada)
-            curso.save()
-            return redirect('cursos')
-    else:
-        form = CursoForm()
-    return render(request, 'myapp/curso_formulario.html', {'form': form})
-
-def curso_editar(request, id):
-    curso = get_object_or_404(Curso, id=id)
-    if request.method == 'POST':
-        form = CursoModelForm(request.POST, instance=curso)
-        if form.is_valid():
-            form.save()
-            return redirect('cursos')
-    else:
-        form = CursoModelForm(instance=curso)
-    return render(request, 'myapp/curso_editar.html', {'form': form, 'curso': curso})
-
-def curso_eliminar(request, id):
-    curso = get_object_or_404(Curso, id=id)
-    curso.delete()
-    return redirect('cursos')
-
-
-# ================= PROFESORES =================
-def profesores(request):
-    query = request.GET.get('q')
-    if query:
-        profesores = Profesor.objects.filter(
-            models.Q(nombre__icontains=query) |
-            models.Q(apellido__icontains=query) |
-            models.Q(profesion__icontains=query)
-        )
-    else:
-        profesores = Profesor.objects.all()
-    return render(request, 'myapp/profesores.html', {'profesores': profesores, 'query': query})
-
-def profesorFormulario(request):
-    if request.method == 'POST':
-        form = ProfesorFormulario(request.POST)
-        if form.is_valid():
-            Profesor.objects.create(
-                nombre=form.cleaned_data['nombre'],
-                apellido=form.cleaned_data['apellido'],
-                email=form.cleaned_data['email'],
-                profesion=form.cleaned_data['profesion']
-            )
-            return redirect('profesores')
-    else:
-        form = ProfesorFormulario()
-    return render(request, 'myapp/profesor_formulario.html', {'form': form})
-
-def profesor_editar(request, id):
-    profesor = get_object_or_404(Profesor, id=id)
-    if request.method == 'POST':
-        form = ProfesorForm(request.POST, instance=profesor)
-        if form.is_valid():
-            form.save()
-            return redirect('profesores')
-    else:
-        form = ProfesorForm(instance=profesor)
-    return render(request, 'myapp/profesor_editar.html', {'form': form, 'profesor': profesor})
-
-def profesor_eliminar(request, id):
-    profesor = get_object_or_404(Profesor, id=id)
-    if request.method == 'POST':
-        profesor.delete()
-        return redirect('profesores')
-    return render(request, 'myapp/profesor_confirm_delete.html', {'profesor': profesor})
-
-
-# ================= ESTUDIANTES =================
-def lista_estudiantes(request):
-    query = request.GET.get('q')
-    if query:
-        estudiantes = Estudiante.objects.filter(
-            models.Q(nombre__icontains=query) |
-            models.Q(apellido__icontains=query) |
-            models.Q(email__icontains=query)
-        )
-    else:
-        estudiantes = Estudiante.objects.all()
-    return render(request, 'myapp/lista_estudiantes.html', {'estudiantes': estudiantes, 'query': query})
-
-def detalle_estudiante(request, pk):
-    estudiante = get_object_or_404(Estudiante, pk=pk)
-    return render(request, 'myapp/detalle_estudiante.html', {'estudiante': estudiante})
-
-def estudianteFormulario(request):
-    if request.method == 'POST':
-        form = EstudianteForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_estudiantes')
-    else:
-        form = EstudianteForm()
-    return render(request, 'myapp/estudiante_formulario.html', {'form': form})
-
-def estudiante_editar(request, id):
-    estudiante = get_object_or_404(Estudiante, id=id)
-    if request.method == 'POST':
-        form = EstudianteForm(request.POST, instance=estudiante)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_estudiantes')
-    else:
-        form = EstudianteForm(instance=estudiante)
-    return render(request, 'myapp/estudiante_editar.html', {'form': form, 'estudiante': estudiante})
-
-def estudiante_eliminar(request, id):
-    estudiante = get_object_or_404(Estudiante, id=id)
-    estudiante.delete()
-    return redirect('lista_estudiantes')
-
-
-# ================= ENTREGABLES =================
-def entregables(request):
-    query = request.GET.get('q')
-    if query:
-        entregables = Entregable.objects.filter(nombre__icontains=query)
-    else:
-        entregables = Entregable.objects.all()
-    return render(request, 'myapp/entregables.html', {'entregables': entregables, 'query': query})
-
-def entregableFormulario(request):
-    if request.method == 'POST':
-        form = EntregableForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('entregables')
-    else:
-        form = EntregableForm()
-    return render(request, 'myapp/entregable_formulario.html', {'form': form})
-
-def entregable_editar(request, id):
-    entregable = get_object_or_404(Entregable, id=id)
-    if request.method == 'POST':
-        form = EntregableForm(request.POST, instance=entregable)
-        if form.is_valid():
-            form.save()
-            return redirect('entregables')
-    else:
-        form = EntregableForm(instance=entregable)
-    return render(request, 'myapp/entregable_editar.html', {'form': form, 'entregable': entregable})
-
-def entregable_eliminar(request, id):
-    entregable = get_object_or_404(Entregable, id=id)
-    entregable.delete()
-    return redirect('entregables')
-
-# ================= USUARIOS (LOGIN / REGISTRO / LOGOUT) =================
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('cursos')
@@ -229,15 +64,15 @@ def registro_view(request):
         'active_tab': 'registro'
     })
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('index')
 
-def editar_perfil(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
 
-    # Obtiene el avatar del usuario o le crea uno vacío si aún no tiene
+# ================= PERFIL Y AVATAR =================
+@login_required
+def editar_perfil(request):
     avatar, _ = Avatar.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
@@ -247,7 +82,7 @@ def editar_perfil(request):
         if user_form.is_valid() and avatar_form.is_valid():
             user_form.save()
             avatar_form.save()
-            return redirect('index')
+            return redirect('cursos')
     else:
         user_form = EditarPerfilForm(instance=request.user)
         avatar_form = AvatarForm(instance=avatar)
@@ -256,3 +91,188 @@ def editar_perfil(request):
         'user_form': user_form,
         'avatar_form': avatar_form
     })
+
+
+# ================= CURSOS =================
+@login_required
+def cursos(request):
+    query = request.GET.get('q')
+    if query:
+        cursos = Curso.objects.filter(
+            models.Q(nombre__icontains=query) | models.Q(camada__icontains=query)
+        )
+    else:
+        cursos = Curso.objects.all()
+    return render(request, 'myapp/cursos.html', {'cursos': cursos, 'query': query})
+
+@login_required
+def cursoform(request):
+    if request.method == 'POST':
+        form = CursoForm(request.POST)
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            camada = form.cleaned_data['camada']
+            curso = Curso(nombre=nombre, camada=camada)
+            curso.save()
+            return redirect('cursos')
+    else:
+        form = CursoForm()
+    return render(request, 'myapp/curso_formulario.html', {'form': form})
+
+@login_required
+def curso_editar(request, id):
+    curso = get_object_or_404(Curso, id=id)
+    if request.method == 'POST':
+        form = CursoModelForm(request.POST, instance=curso)
+        if form.is_valid():
+            form.save()
+            return redirect('cursos')
+    else:
+        form = CursoModelForm(instance=curso)
+    return render(request, 'myapp/curso_editar.html', {'form': form, 'curso': curso})
+
+@login_required
+def curso_eliminar(request, id):
+    curso = get_object_or_404(Curso, id=id)
+    curso.delete()
+    return redirect('cursos')
+
+
+# ================= PROFESORES =================
+@login_required
+def profesores(request):
+    query = request.GET.get('q')
+    if query:
+        profesores = Profesor.objects.filter(
+            models.Q(nombre__icontains=query) |
+            models.Q(apellido__icontains=query) |
+            models.Q(profesion__icontains=query)
+        )
+    else:
+        profesores = Profesor.objects.all()
+    return render(request, 'myapp/profesores.html', {'profesores': profesores, 'query': query})
+
+@login_required
+def profesorFormulario(request):
+    if request.method == 'POST':
+        form = ProfesorFormulario(request.POST)
+        if form.is_valid():
+            Profesor.objects.create(
+                nombre=form.cleaned_data['nombre'],
+                apellido=form.cleaned_data['apellido'],
+                email=form.cleaned_data['email'],
+                profesion=form.cleaned_data['profesion']
+            )
+            return redirect('profesores')
+    else:
+        form = ProfesorFormulario()
+    return render(request, 'myapp/profesor_formulario.html', {'form': form})
+
+@login_required
+def profesor_editar(request, id):
+    profesor = get_object_or_404(Profesor, id=id)
+    if request.method == 'POST':
+        form = ProfesorForm(request.POST, instance=profesor)
+        if form.is_valid():
+            form.save()
+            return redirect('profesores')
+    else:
+        form = ProfesorForm(instance=profesor)
+    return render(request, 'myapp/profesor_editar.html', {'form': form, 'profesor': profesor})
+
+@login_required
+def profesor_eliminar(request, id):
+    profesor = get_object_or_404(Profesor, id=id)
+    if request.method == 'POST':
+        profesor.delete()
+        return redirect('profesores')
+    return render(request, 'myapp/profesor_confirm_delete.html', {'profesor': profesor})
+
+
+# ================= ESTUDIANTES =================
+@login_required
+def lista_estudiantes(request):
+    query = request.GET.get('q')
+    if query:
+        estudiantes = Estudiante.objects.filter(
+            models.Q(nombre__icontains=query) |
+            models.Q(apellido__icontains=query) |
+            models.Q(email__icontains=query)
+        )
+    else:
+        estudiantes = Estudiante.objects.all()
+    return render(request, 'myapp/lista_estudiantes.html', {'estudiantes': estudiantes, 'query': query})
+
+@login_required
+def detalle_estudiante(request, pk):
+    estudiante = get_object_or_404(Estudiante, pk=pk)
+    return render(request, 'myapp/detalle_estudiante.html', {'estudiante': estudiante})
+
+@login_required
+def estudianteFormulario(request):
+    if request.method == 'POST':
+        form = EstudianteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_estudiantes')
+    else:
+        form = EstudianteForm()
+    return render(request, 'myapp/estudiante_formulario.html', {'form': form})
+
+@login_required
+def estudiante_editar(request, id):
+    estudiante = get_object_or_404(Estudiante, id=id)
+    if request.method == 'POST':
+        form = EstudianteForm(request.POST, instance=estudiante)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_estudiantes')
+    else:
+        form = EstudianteForm(instance=estudiante)
+    return render(request, 'myapp/estudiante_editar.html', {'form': form, 'estudiante': estudiante})
+
+@login_required
+def estudiante_eliminar(request, id):
+    estudiante = get_object_or_404(Estudiante, id=id)
+    estudiante.delete()
+    return redirect('lista_estudiantes')
+
+
+# ================= ENTREGABLES =================
+@login_required
+def entregables(request):
+    query = request.GET.get('q')
+    if query:
+        entregables = Entregable.objects.filter(nombre__icontains=query)
+    else:
+        entregables = Entregable.objects.all()
+    return render(request, 'myapp/entregables.html', {'entregables': entregables, 'query': query})
+
+@login_required
+def entregableFormulario(request):
+    if request.method == 'POST':
+        form = EntregableForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('entregables')
+    else:
+        form = EntregableForm()
+    return render(request, 'myapp/entregable_formulario.html', {'form': form})
+
+@login_required
+def entregable_editar(request, id):
+    entregable = get_object_or_404(Entregable, id=id)
+    if request.method == 'POST':
+        form = EntregableForm(request.POST, instance=entregable)
+        if form.is_valid():
+            form.save()
+            return redirect('entregables')
+    else:
+        form = EntregableForm(instance=entregable)
+    return render(request, 'myapp/entregable_editar.html', {'form': form, 'entregable': entregable})
+
+@login_required
+def entregable_eliminar(request, id):
+    entregable = get_object_or_404(Entregable, id=id)
+    entregable.delete()
+    return redirect('entregables')
