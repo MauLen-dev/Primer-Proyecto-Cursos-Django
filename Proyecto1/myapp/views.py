@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
 from .models import Estudiante, Profesor, Curso, Entregable
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from .forms import (
     CursoForm, CursoModelForm,
     ProfesorFormulario, ProfesorForm,
-    EstudianteForm, EntregableForm
+    EstudianteForm, EntregableForm, RegistroUsuarioForm
 )
 
 def index(request):
@@ -177,3 +179,30 @@ def entregable_eliminar(request, id):
     entregable = get_object_or_404(Entregable, id=id)
     entregable.delete()
     return redirect('entregables')
+
+# ================= USUARIOS (LOGIN / REGISTRO / LOGOUT) =================
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usuario = form.get_user()
+            login(request, usuario)
+            return redirect('index')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'myapp/login.html', {'form': form})
+
+def registro_view(request):
+    if request.method == 'POST':
+        form = RegistroUsuarioForm(request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            login(request, usuario)  # Inicia sesión automáticamente tras registrarse
+            return redirect('index')
+    else:
+        form = RegistroUsuarioForm()
+    return render(request, 'myapp/registro.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')

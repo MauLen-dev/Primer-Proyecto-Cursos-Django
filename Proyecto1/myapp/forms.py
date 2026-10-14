@@ -1,6 +1,18 @@
 from django import forms
 from .models import Profesor, Estudiante, Curso, Entregable
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
+class RegistroUsuarioForm(UserCreationForm):
+    email = forms.EmailField(required=True, label="Correo electrónico")
+    first_name = forms.CharField(max_length=100, required=True, label="Nombre")
+    last_name = forms.CharField(max_length=100, required=True, label="Apellido")
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        
+        
 class CursoForm(forms.Form):
     nombre = forms.CharField(max_length=100, label="Nombre del Curso")
     camada = forms.IntegerField(label="Camada")

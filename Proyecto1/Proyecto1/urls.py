@@ -46,4 +46,9 @@ urlpatterns = [
     path('entregableFormulario/', views.entregableFormulario, name="entregableFormulario"),
     path('entregable/editar/<int:id>/', views.entregable_editar, name="entregableEditar"),
     path('entregable/eliminar/<int:id>/', views.entregable_eliminar, name="entregableEliminar"),
+    
+    # Usuarios (Login / Registro / Logout)
+    path('login/', views.login_view, name="login"),
+    path('registro/', views.registro_view, name="registro"),
+    path('logout/', views.logout_view, name="logout"),
 ]
