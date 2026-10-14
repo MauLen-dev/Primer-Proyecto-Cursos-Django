@@ -2,8 +2,11 @@
 {% block title %} Lista de Profesores {% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4"> Lista de Profesores </h1>
-    <div class="text-end mb-4"> <a class="btn btn-secondary" href="{% url 'profesorFormulario' %}">Agregar Profesor</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Lista de Profesores</h1>
+        <a class="btn btn-primary" href="{% url 'profesorFormulario' %}">
+            <i class="bi bi-plus-lg me-1"></i>Agregar Profesor
+        </a>
     </div>
 
     <form method="get" action="{% url 'profesores' %}" class="mb-4">
@@ -17,32 +20,26 @@
 
     <div class="row">
         {% for profesor in profesores %}
-        <div class="col-mb-4 col-sm-6 mb-4">
+        <div class="col-md-4 col-sm-6 mb-4">
             <div class="card shadow-sm h-100">
-                <div class="card body">
-                    <h5 class="card-title text-primary"> {{ profesor.apellido }} {{ profesor.nombre }} 
-                    </h5>
-                    <p class="card-text mb-1"> <strong> Email:</strong> {{profesor.email}}
-                    </p>
-                    <p class="card-text"> <strong> Profesión: </strong> {{ profesor.profesion }} 
-                    </p>
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ profesor.apellido }}, {{ profesor.nombre }}</h5>
+                    <p class="card-text mb-1"><strong>Email:</strong> {{ profesor.email }}</p>
+                    <p class="card-text"><strong>Profesión:</strong> {{ profesor.profesion }}</p>
                 </div>
-                <div class="card-footer text-center">
-                    <a href="{% url 'profesorEditar' profesor.id %}" class="btn btn-warning btn-sm me-2">Editar</a>
-                    <a href="{% url 'profesorEliminar' profesor.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar a {{ profesor.nombre }} {{ profesor.apellido }} ?')"> Eliminar </a>
+                <div class="card-footer bg-white border-top-0 text-center pb-3">
+                    <a href="{% url 'profesorEditar' profesor.id %}" class="btn btn-warning btn-sm me-2">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'profesorEliminar' profesor.id %}" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
                 </div>
-
             </div>
-           
         </div>
-       {% empty %}
-       <p class="text-muted text-center"> No hay profesores registrados.</p>
-       {% endfor %}
-
-    
-
+        {% empty %}
+        <p class="text-muted text-center">No hay profesores registrados.</p>
+        {% endfor %}
     </div>
-
-    
 </div>
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Editar Entregable{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Editar Entregable: {{ entregable.nombre }}</h2>
+    <div class="card shadow-sm p-4 mx-auto" style="max-width: 500px;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Nombre del Trabajo</label>
+                {{ form.nombre|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha de Entrega</label>
+                {{ form.fecha_de_entrega|add_class:"form-control" }}
+            </div>
+            <div class="form-check mb-3">
+                {{ form.entregado|add_class:"form-check-input" }}
+                <label class="form-check-label">¿Ya fue entregado?</label>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{% url 'entregables' %}" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

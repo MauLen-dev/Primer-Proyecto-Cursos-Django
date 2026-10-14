@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Agregar Estudiante {% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Agregar Estudiante</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form action="{% url 'estudianteFormulario' %}" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_nombre" class="form-label">Nombre</label>
+                            {{ form.nombre|add_class:"form-control" }}
+                            {{ form.nombre.errors }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_apellido" class="form-label">Apellido</label>
+                            {{ form.apellido|add_class:"form-control" }}
+                            {{ form.apellido.errors }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Correo electrónico</label>
+                            {{ form.email|add_class:"form-control" }}
+                            {{ form.email.errors }}
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i> Guardar
+                            </button>
+                            <a href="{% url 'lista_estudiantes' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

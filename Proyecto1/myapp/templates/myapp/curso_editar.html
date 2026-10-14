@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Editar Curso{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Editar Curso: {{ curso.nombre }}</h2>
+    <div class="card shadow-sm p-4 mx-auto" style="max-width: 500px;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Nombre del Curso</label>
+                {{ form.nombre|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Camada</label>
+                {{ form.camada|add_class:"form-control" }}
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{% url 'cursos' %}" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

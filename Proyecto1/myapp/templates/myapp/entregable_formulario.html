@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Agregar Entregable {% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Agregar Entregable</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form action="{% url 'entregableFormulario' %}" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Nombre del Trabajo</label>
+                            {{ form.nombre|add_class:"form-control" }}
+                            {{ form.nombre.errors }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fecha de Entrega</label>
+                            {{ form.fecha_de_entrega|add_class:"form-control" }}
+                            {{ form.fecha_de_entrega.errors }}
+                        </div>
+                        <div class="form-check mb-3">
+                            {{ form.entregado|add_class:"form-check-input" }}
+                            <label class="form-check-label">¿Ya fue entregado?</label>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i> Guardar
+                            </button>
+                            <a href="{% url 'entregables' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
