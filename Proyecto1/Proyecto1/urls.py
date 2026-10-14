@@ -18,18 +18,32 @@ from django.contrib import admin
 from django.urls import path
 from myapp import views
 
-app_name = "myapp"
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
+
+    # Cursos
     path('cursos/', views.cursos, name="cursos"),
+    path('cursoform/', views.cursoform, name="cursoform"),
+    path('curso/editar/<int:id>/', views.curso_editar, name="cursoEditar"),
+    path('curso/eliminar/<int:id>/', views.curso_eliminar, name="cursoEliminar"),
+
+    # Profesores
     path('profesores/', views.profesores, name="profesores"),
-    path('entregables/', views.entregables, name="entregables"),
+    path('profesorFormulario/', views.profesorFormulario, name="profesorFormulario"),
+    path('profesor/editar/<int:id>/', views.profesor_editar, name="profesorEditar"),
+    path('profesor/eliminar/<int:id>/', views.profesor_eliminar, name="profesorEliminar"),
+
+    # Estudiantes
     path('lista_estudiantes/', views.lista_estudiantes, name="lista_estudiantes"),
     path('detalle_estudiante/<int:pk>/', views.detalle_estudiante, name="detalle_estudiante"),
-    path('cursoform/', views.cursoform, name="cursoform"),
-    path('profesorFormulario/', views.profesorFormulario, name="profesorFormulario"),
-    path('profesor/editar/<int:id>', views.profesor_editar, name="profesorEditar"),
-    path('profesor/eliminar/<int:id>', views.profesor_eliminar, name="profesorEliminar"),
+    path('estudianteFormulario/', views.estudianteFormulario, name="estudianteFormulario"),
+    path('estudiante/editar/<int:id>/', views.estudiante_editar, name="estudianteEditar"),
+    path('estudiante/eliminar/<int:id>/', views.estudiante_eliminar, name="estudianteEliminar"),
+
+    # Entregables
+    path('entregables/', views.entregables, name="entregables"),
+    path('entregableFormulario/', views.entregableFormulario, name="entregableFormulario"),
+    path('entregable/editar/<int:id>/', views.entregable_editar, name="entregableEditar"),
+    path('entregable/eliminar/<int:id>/', views.entregable_eliminar, name="entregableEliminar"),
 ]
