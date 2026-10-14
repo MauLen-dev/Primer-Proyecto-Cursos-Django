@@ -57,7 +57,13 @@ class EstudianteForm(forms.ModelForm):
 class EntregableForm(forms.ModelForm):
     class Meta:
         model = Entregable
-        fields = ['nombre', 'fecha_de_entrega', 'entregado']
+        fields = ['curso', 'nombre', 'fecha_de_entrega', 'entregado']
+        labels = {
+            'curso': 'Curso asociado',
+            'nombre': 'Nombre del Trabajo',
+            'fecha_de_entrega': 'Fecha de Entrega',
+            'entregado': '¿Ya fue entregado?'
+        }
         widgets = {
             'fecha_de_entrega': forms.DateInput(attrs={'type': 'date'}),
         }

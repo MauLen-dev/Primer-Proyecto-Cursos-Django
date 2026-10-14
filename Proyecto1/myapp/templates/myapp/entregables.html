@@ -2,16 +2,37 @@
 {% block title %} Página de Entregas {% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Trabajos Entregados</h1>
-        <a class="btn btn-primary" href="{% url 'entregableFormulario' %}">
-            <i class="bi bi-plus-lg me-1"></i>Agregar Entregable
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="mb-0">
+                Trabajos Entregados
+                {% if curso_seleccionado %}
+                    <span class="text-primary fs-3">- {{ curso_seleccionado.nombre }} (Camada {{ curso_seleccionado.camada }})</span>
+                {% endif %}
+            </h1>
+        </div>
+        <div class="d-flex gap-2">
+            {% if curso_seleccionado %}
+                <a class="btn btn-outline-secondary" href="{% url 'entregables' %}">
+                    Ver todos los cursos
+                </a>
+                <a class="btn btn-primary" href="{% url 'entregableFormulario' %}?curso_id={{ curso_seleccionado.id }}">
+                    <i class="bi bi-plus-lg me-1"></i>Agregar a este Curso
+                </a>
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'entregableFormulario' %}">
+                    <i class="bi bi-plus-lg me-1"></i>Agregar Entregable
+                </a>
+            {% endif %}
+        </div>
     </div>
 
     <form method="get" action="{% url 'entregables' %}" class="mb-4">
+        {% if curso_seleccionado %}
+            <input type="hidden" name="curso_id" value="{{ curso_seleccionado.id }}">
+        {% endif %}
         <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Buscar entregable por nombre..." value="{{ query|default_if_none:'' }}">
+            <input type="text" name="q" class="form-control" placeholder="Buscar por nombre de trabajo o curso..." value="{{ query|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
@@ -22,7 +43,8 @@
         <table class="table table-striped table-hover align-middle shadow-sm bg-white rounded overflow-hidden">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Nombre</th>
+                    <th scope="col">Nombre del Trabajo</th>
+                    <th scope="col">Curso</th>
                     <th scope="col">Fecha de Entrega</th>
                     <th scope="col">Entregado</th>
                     <th scope="col" class="text-center">Acciones</th>
@@ -32,6 +54,15 @@
                 {% for entregable in entregables %}
                 <tr>
                     <td class="fw-medium">{{ entregable.nombre }}</td>
+                    <td>
+                        {% if entregable.curso %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle">
+                                {{ entregable.curso.nombre }} ({{ entregable.curso.camada }})
+                            </span>
+                        {% else %}
+                            <span class="text-muted small">Sin asignar</span>
+                        {% endif %}
+                    </td>
                     <td>{{ entregable.fecha_de_entrega }}</td>
                     <td> 
                         {% if entregable.entregado %}
@@ -51,7 +82,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="text-center text-muted py-4">No hay entregables registrados.</td>
+                    <td colspan="5" class="text-center text-muted py-4">No hay entregables registrados para mostrar.</td>
                 </tr>
                 {% endfor %}
             </tbody>

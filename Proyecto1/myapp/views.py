@@ -242,21 +242,40 @@ def estudiante_eliminar(request, id):
 @login_required
 def entregables(request):
     query = request.GET.get('q')
+    curso_id = request.GET.get('curso_id')
+    curso_seleccionado = None
+
+    entregables_qs = Entregable.objects.select_related('curso').all()
+
+    if curso_id:
+        curso_seleccionado = get_object_or_404(Curso, id=curso_id)
+        entregables_qs = entregables_qs.filter(curso_id=curso_id)
+
     if query:
-        entregables = Entregable.objects.filter(nombre__icontains=query)
-    else:
-        entregables = Entregable.objects.all()
-    return render(request, 'myapp/entregables.html', {'entregables': entregables, 'query': query})
+        entregables_qs = entregables_qs.filter(
+            models.Q(nombre__icontains=query) |
+            models.Q(curso__nombre__icontains=query)
+        )
+
+    return render(request, 'myapp/entregables.html', {
+        'entregables': entregables_qs,
+        'query': query,
+        'curso_seleccionado': curso_seleccionado
+    })
 
 @login_required
 def entregableFormulario(request):
+    curso_id = request.GET.get('curso_id')
     if request.method == 'POST':
         form = EntregableForm(request.POST)
         if form.is_valid():
-            form.save()
+            entregable = form.save()
+            if entregable.curso:
+                return redirect(f"/entregables/?curso_id={entregable.curso.id}")
             return redirect('entregables')
     else:
-        form = EntregableForm()
+        initial_data = {'curso': curso_id} if curso_id else {}
+        form = EntregableForm(initial=initial_data)
     return render(request, 'myapp/entregable_formulario.html', {'form': form})
 
 @login_required

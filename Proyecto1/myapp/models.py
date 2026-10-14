@@ -24,11 +24,13 @@ class Curso(models.Model):
         return self.nombre
     
 class Entregable(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='entregables', null=True, blank=True)
     nombre = models.CharField(max_length=100) 
     fecha_de_entrega = models.DateField()
     entregado = models.BooleanField()   
+
     def __str__(self):
-        return self.nombre
+        return f"{self.nombre} ({self.curso.nombre if self.curso else 'Sin curso'})"
 
 class Avatar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

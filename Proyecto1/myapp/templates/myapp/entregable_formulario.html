@@ -11,6 +11,11 @@
                     <form action="{% url 'entregableFormulario' %}" method="post" novalidate>
                         {% csrf_token %}
                         <div class="mb-3">
+                            <label class="form-label">Curso asociado</label>
+                            {{ form.curso|add_class:"form-select" }}
+                            {{ form.curso.errors }}
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Nombre del Trabajo</label>
                             {{ form.nombre|add_class:"form-control" }}
                             {{ form.nombre.errors }}
