@@ -36,8 +36,13 @@ class CursoForm(forms.Form):
 class CursoModelForm(forms.ModelForm):
     class Meta:
         model = Curso
-        fields = ['nombre', 'camada']
-
+        fields = ['nombre', 'camada', 'profesor']
+        labels = {
+            'nombre': 'Nombre del Curso',
+            'camada': 'Camada',
+            'profesor': 'Profesor a cargo'
+        }
+        
 class ProfesorFormulario(forms.Form):
     nombre = forms.CharField(max_length=100, label="Nombre")
     apellido = forms.CharField(max_length=100, label="Apellido")

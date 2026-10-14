@@ -97,26 +97,25 @@ def editar_perfil(request):
 @login_required
 def cursos(request):
     query = request.GET.get('q')
+    cursos_qs = Curso.objects.select_related('profesor').all()
     if query:
-        cursos = Curso.objects.filter(
-            models.Q(nombre__icontains=query) | models.Q(camada__icontains=query)
+        cursos_qs = cursos_qs.filter(
+            models.Q(nombre__icontains=query) |
+            models.Q(camada__icontains=query) |
+            models.Q(profesor__nombre__icontains=query) |
+            models.Q(profesor__apellido__icontains=query)
         )
-    else:
-        cursos = Curso.objects.all()
-    return render(request, 'myapp/cursos.html', {'cursos': cursos, 'query': query})
+    return render(request, 'myapp/cursos.html', {'cursos': cursos_qs, 'query': query})
 
 @login_required
 def cursoform(request):
     if request.method == 'POST':
-        form = CursoForm(request.POST)
+        form = CursoModelForm(request.POST)
         if form.is_valid():
-            nombre = form.cleaned_data['nombre']
-            camada = form.cleaned_data['camada']
-            curso = Curso(nombre=nombre, camada=camada)
-            curso.save()
+            form.save()
             return redirect('cursos')
     else:
-        form = CursoForm()
+        form = CursoModelForm()
     return render(request, 'myapp/curso_formulario.html', {'form': form})
 
 @login_required

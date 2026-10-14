@@ -20,6 +20,8 @@ class Profesor(models.Model):
 class Curso(models.Model):    
     nombre = models.CharField(max_length=100)
     camada = models.IntegerField()
+    profesor = models.ForeignKey(Profesor, on_delete=models.SET_NULL, null=True, blank=True, related_name='cursos')
+
     def __str__(self):
         return self.nombre
     

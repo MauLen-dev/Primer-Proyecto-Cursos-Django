@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
-{% block title %} Formulario - Agregar Cursos {% endblock %}
 {% load widget_tweaks %}
+{% block title %} Agregar Curso {% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4"> Agregar Curso </h1>
+    <h1 class="text-center mb-4">Agregar Curso</h1>
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card shadow-sm">
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form action="{% url 'cursoform' %}" method="post" novalidate>
-                        {% csrf_token %} 
+                        {% csrf_token %}
                         <div class="mb-3">
-                            <label for="id_nombre" class="form-label">Nombre del Curso</label>
-                             {{ form.nombre|add_class:"form-control"}}
+                            <label class="form-label">Nombre del Curso</label>
+                            {{ form.nombre|add_class:"form-control" }}
+                            {{ form.nombre.errors }}
                         </div>
                         <div class="mb-3">
-                            <label for="id_camada" class="form-label">Camada</label>
-                            {{ form.camada|add_class:"form-control"}}
+                            <label class="form-label">Camada</label>
+                            {{ form.camada|add_class:"form-control" }}
+                            {{ form.camada.errors }}
                         </div>
-                        <div class="d-grid">
+                        <div class="mb-3">
+                            <label class="form-label">Profesor a cargo</label>
+                            {{ form.profesor|add_class:"form-select" }}
+                            {{ form.profesor.errors }}
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle"></i>
-                                Enviar
+                                <i class="bi bi-check-circle me-1"></i> Guardar Curso
                             </button>
+                            <a href="{% url 'cursos' %}" class="btn btn-outline-secondary">Cancelar</a>
                         </div>
                     </form>
                 </div>

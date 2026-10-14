@@ -15,6 +15,10 @@
                 <label class="form-label">Camada</label>
                 {{ form.camada|add_class:"form-control" }}
             </div>
+            <div class="mb-3">
+                <label class="form-label">Profesor a cargo</label>
+                {{ form.profesor|add_class:"form-select" }}
+            </div>
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 <a href="{% url 'cursos' %}" class="btn btn-secondary ms-2">Cancelar</a>
