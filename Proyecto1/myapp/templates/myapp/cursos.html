@@ -11,14 +11,12 @@
          <div class="col-md-4 col-sm-6 mb-4">
             <div class="card shadow-sm h-100">
                <div class="card-body">
-                  <h5 class="card-title text-primary"> {{ curso.nombre }} </h5>
-                  <p class="card-text mb-1"> <strong>Camada: </strong> {{ curso.camada }} </p>
-                  <p class="card-text"> <strong> Detalle: </strong> {{ curso.camada }} 
-                  </p>
+                  <a href="#"><h5 class="card-title text-primary"> {{ curso.nombre }} </h5> </a>
+                  <p class="card-text mb-1"> <strong>Camada: </strong> {{ curso.camada }} </p> 
+                  <p class="card-text mb-1"> <strong>Profesor: </strong> {{ profesor.nombre }} {{ profesor.apellido }} </p>
                </div>
-
             </div>
-         </div>
+         </div>   
          {% empty %}
          <p class="text-muted text-center"> No hay cursos disponibles. </p>  
          {% endfor %}
