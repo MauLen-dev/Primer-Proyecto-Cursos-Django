@@ -109,20 +109,32 @@
                         </ul>
 
                         <!-- Botón de acción a la derecha -->
-                        <div class="d-flex">
-                            {% if user.is_authenticated %}
-                                <span class="navbar-text text-light me-3">
-                                    <i class="bi bi-person-circle me-1"></i>{{ user.username }}
-                                </span>
-                                <a class="btn btn-outline-light btn-login" href="{% url 'logout' %}">
-                                    <i class="bi bi-box-arrow-right me-1"></i>Salir
-                                </a>
-                            {% else %}
-                                <a class="btn btn-outline-light btn-login" href="{% url 'login' %}">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
-                                </a>
-                            {% endif %}
-                        </div>
+                       <!-- Botones de usuario a la derecha del navbar -->
+                       <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'editar_perfil' %}" class="d-flex align-items-center text-light text-decoration-none me-2">
+                        {% if user.avatar.imagen %}
+                        <img src="{{ user.avatar.imagen.url }}" alt="Avatar" class="rounded-circle me-2 border border-2 border-primary" style="width: 36px; height: 36px; object-fit: cover;">
+                        {% else %}
+                        <i class="bi bi-person-circle text-primary fs-4 me-2"></i>
+                        {% endif %}
+                        <span class="small">Hola, <strong>{{ user.username }}</strong></span>
+                        </a>
+                        <a class="btn btn-outline-info btn-sm px-3" href="{% url 'editar_perfil' %}">
+                        <i class="bi bi-gear me-1"></i>Mi Perfil
+                        </a>
+                        <a class="btn btn-outline-light btn-sm px-3" href="{% url 'logout' %}">
+                        <i class="bi bi-box-arrow-right me-1"></i>Salir
+                        </a>
+                       {% else %}
+                       <a class="btn btn-outline-light btn-sm px-3" href="{% url 'registro' %}">
+                       Registrarse
+                       </a>
+                       <a class="btn btn-primary btn-login text-white btn-sm px-3" href="{% url 'login' %}">
+                       <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                       </a>
+                       {% endif %}
+                    </div>
                 </div>
             </nav>
         </header>

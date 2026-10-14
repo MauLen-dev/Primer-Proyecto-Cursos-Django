@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models
-from .models import Estudiante, Profesor, Curso, Entregable
+from .models import Estudiante, Profesor, Curso, Entregable, Avatar
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import (
     CursoForm, CursoModelForm,
     ProfesorFormulario, ProfesorForm,
-    EstudianteForm, EntregableForm, RegistroUsuarioForm
+    EstudianteForm, EntregableForm, RegistroUsuarioForm, EditarPerfilForm, AvatarForm
 )
 
 def index(request):
@@ -206,3 +206,27 @@ def registro_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+def editar_perfil(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    # Obtiene el avatar del usuario o le crea uno vacío si aún no tiene
+    avatar, _ = Avatar.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        user_form = EditarPerfilForm(request.POST, instance=request.user)
+        avatar_form = AvatarForm(request.POST, request.FILES, instance=avatar)
+
+        if user_form.is_valid() and avatar_form.is_valid():
+            user_form.save()
+            avatar_form.save()
+            return redirect('index')
+    else:
+        user_form = EditarPerfilForm(instance=request.user)
+        avatar_form = AvatarForm(instance=avatar)
+
+    return render(request, 'myapp/editar_perfil.html', {
+        'user_form': user_form,
+        'avatar_form': avatar_form
+    })

@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from myapp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,8 +49,12 @@ urlpatterns = [
     path('entregable/editar/<int:id>/', views.entregable_editar, name="entregableEditar"),
     path('entregable/eliminar/<int:id>/', views.entregable_eliminar, name="entregableEliminar"),
     
-    # Usuarios (Login / Registro / Logout)
+    # Usuarios (Login / Registro / Logout / Perfil)
     path('login/', views.login_view, name="login"),
     path('registro/', views.registro_view, name="registro"),
     path('logout/', views.logout_view, name="logout"),
+    path('perfil/editar/', views.editar_perfil, name="editar_perfil"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

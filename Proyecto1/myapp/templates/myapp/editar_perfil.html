@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card shadow-sm p-4">
+                <div class="text-center mb-4">
+                    {% if user.avatar.imagen %}
+                        <img src="{{ user.avatar.imagen.url }}" alt="Avatar actual" class="rounded-circle shadow-sm mb-2 border border-3 border-primary" style="width: 90px; height: 90px; object-fit: cover;">
+                    {% else %}
+                        <i class="bi bi-person-bounding-box text-primary display-4"></i>
+                    {% endif %}
+                    <h2 class="fw-bold mt-2">Editar Perfil</h2>
+                    <p class="text-muted small">Usuario: <strong>@{{ user.username }}</strong></p>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    <h6 class="fw-bold text-secondary border-bottom pb-2 mb-3">Datos Personales</h6>
+                    {% for field in user_form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">{{ field.label }}</label>
+                            {{ field|add_class:"form-control" }}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <h6 class="fw-bold text-secondary border-bottom pb-2 mb-3 mt-4">Imagen de Perfil</h6>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ avatar_form.imagen.label }}</label>
+                        {{ avatar_form.imagen|add_class:"form-control" }}
+                        {% for error in avatar_form.imagen.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary py-2">
+                            <i class="bi bi-check-circle me-1"></i> Guardar Cambios
+                        </button>
+                        <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

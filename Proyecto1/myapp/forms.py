@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profesor, Estudiante, Curso, Entregable
+from .models import Profesor, Estudiante, Curso, Entregable, Avatar
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -12,7 +12,23 @@ class RegistroUsuarioForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
         
-        
+class EditarPerfilForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label="Correo electrónico")
+    first_name = forms.CharField(max_length=100, required=True, label="Nombre")
+    last_name = forms.CharField(max_length=100, required=True, label="Apellido")
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['imagen']
+        labels = {
+            'imagen': 'Foto de perfil (Avatar)'
+        }
+                
 class CursoForm(forms.Form):
     nombre = forms.CharField(max_length=100, label="Nombre del Curso")
     camada = forms.IntegerField(label="Camada")
